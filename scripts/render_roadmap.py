@@ -48,28 +48,28 @@ def main():
     draw.text((48, 28), "Digital care roadmap", font=title, fill=INK)
     draw.text(
         (48, 68),
-        "Personal portfolio sequence for Chris Nguu. Not an employer strategy.",
+        "Now, Next, Later for telco digital care. OKR targets and scores are illustrative.",
         font=small,
         fill=MUTED,
     )
 
     cards = [
         (
-            "1  Triage and routing",
+            "Now: Triage and routing",
             (27, 79, 114),
             "Demo: MULTI-HEAD labels, the multi-head model card, and an n8n export.\n"
             "The export has not been run. No gold accuracy is published.\n"
             "Needs operator data: a labelled sample, and a live queue.",
         ),
         (
-            "2  NBA and churn",
+            "Next: NBA and churn",
             (11, 110, 79),
             "Demo: POST /score, a rule-based next action, and CI gates\n"
             "on the IBM US sample, plus SHAP and Fairlearn.\n"
             "Needs operator data: any claim of local performance.",
         ),
         (
-            "3  Self-healing journeys",
+            "Later: Self-healing journeys",
             (108, 52, 131),
             "Demo: synthetic journey KPIs and a cost model from assumptions.\n"
             "A closed loop that changes a live route is not in these repos.\n"
@@ -103,7 +103,7 @@ def main():
 
     draw.text(
         (48, 490),
-        "Horizons are a reading order for four public demos. Key-result numbers elsewhere are illustrative targets.",
+        "Now, Next, Later is a reading order for four public demos. OKR targets and scores are illustrative.",
         font=small,
         fill=MUTED,
     )

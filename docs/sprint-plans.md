@@ -1,10 +1,10 @@
 # Two sprint plans
 
-Personal portfolio plans for Chris Nguu. These sprints were not run. The git history of Projects 1–4 does not record sprint ceremonies, and this file does not invent any. Each story checks a public demo, or it names operator data the demo does not have.
+Independent portfolio plans. These sprints were not run. The git history of Projects 1-4 does not record sprint ceremonies, and this file does not invent any. Each story checks a public demo, or it names operator data the demo does not have.
 
 Acceptance criteria use Given / When / Then. Issue links are the backlog items in this repository. Labels and milestones are applied by `scripts/create_board.sh`, which has not been run.
 
-## Sprint 1 — Triage routing contract
+## Sprint 1 - Triage routing contract
 
 Goal: a reader can see what the triage demo does, and what it must not be quoted as.
 
@@ -41,7 +41,7 @@ As a routing designer, I want the committed n8n file to send an `emergency` labe
 - Given [workflows/README.md](https://github.com/ChristopherKiokoStrathmore/care-automation-roi/blob/dcc01d2d2b538b075f223e0066d12f5e112a0db5/workflows/README.md), when a reader asks whether the file has been imported or executed, then the README says it has not.
 - Given the file's `active` flag, when it is read, then the flag is `false`.
 
-## Sprint 2 — NBA demo behind the published gates
+## Sprint 2 - NBA demo behind the published gates
 
 Goal: the IBM-sample score, the rule, and the governance pack stay tied together. Operator refit is out of the sprint ([#12](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/12)).
 

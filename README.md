@@ -1,22 +1,28 @@
 # Digital care roadmap
 
-A personal portfolio planning artefact by Chris Nguu. It puts four public demos in a reading order: triage and routing, then next-best action and churn, then self-healing journeys.
+Which care-analytics capability should a telco build first, and how would you know it worked?
 
-This is not an employer strategy, not an operator plan, and not a record of work done inside a company. No employer data is used. Key results and the value/effort scores below are **illustrative targets and planning scores**, not achieved results.
+A Now / Next / Later product roadmap that sequences the four earlier projects, with OKRs as goals and a value-versus-effort backlog of 17 issues (#3 to #19), two sprint plans and a pilot charter. Part of an independent portfolio series on telecom customer analytics, built alongside my MSc in Data Science. It builds on the CRISP-DM projects in the series.
 
-## Roadmap
+## Key results (capability and scope)
 
-![Three horizons: triage and routing, NBA and churn, self-healing journeys](docs/roadmap.png)
+- 3 horizons: Now (triage and routing), Next (NBA and churn), Later (self-healing journeys).
+- 17 backlog items (3 epics, 14 stories) scored on value vs effort, 1 to 5 scale.
+- OKR targets and scores are illustrative planning values, not achieved results.
+
+## Now, Next, Later
+
+![Now, Next, Later: triage and routing, NBA and churn, self-healing journeys](docs/roadmap.png)
 
 `scripts/render_roadmap.py` draws that image. The same sequence in text:
 
 ```mermaid
 flowchart LR
-  h1["Horizon 1<br/>Triage and routing"] --> h2["Horizon 2<br/>NBA and churn"]
-  h2 --> h3["Horizon 3<br/>Self-healing journeys"]
+  h1["Now<br/>Triage and routing"] --> h2["Next<br/>NBA and churn"]
+  h2 --> h3["Later<br/>Self-healing journeys"]
 ```
 
-### Horizon 1 — Triage and routing
+### Now - Triage and routing
 
 Demo, today:
 
@@ -25,23 +31,23 @@ Demo, today:
 
 Needs operator data before this is anything but a demo: a labelled sample, and a workflow run against a real queue. Do not quote the smoke floors as accuracy.
 
-### Horizon 2 — NBA and churn
+### Next - NBA and churn
 
 Demo, today:
 
 - [telco-churn-nba-engine](https://github.com/ChristopherKiokoStrathmore/telco-churn-nba-engine) trains on the IBM Telco Customer Churn file, 7,043 rows, US sample. `POST /score` returns a churn probability, path contributions, a CLV proxy, add-on propensities, and a rule-based next action. On the published holdout the gradient-boosting churn model has ROC-AUC 0.846001, PR-AUC 0.656070, and top-decile lift 2.806733, against a dummy prior at ROC-AUC 0.500000. Those numbers are that holdout, not an operator result. Uptake scores are current add-on holding, not campaign response. The action table is a policy, not an uplift model.
-- [responsible-ai-pack](https://github.com/ChristopherKiokoStrathmore/responsible-ai-pack) pins that repo at `21f6115931f4358ebc7cc87d9ba1f4d87fd015aa`. It recomputes the same three metrics, draws TreeSHAP plots, runs Fairlearn on gender and SeniorCitizen, and fails CI under floors 0.82, 0.63, and 2.60. The pack calls itself a personal framework, not an employer policy.
+- [responsible-ai-pack](https://github.com/ChristopherKiokoStrathmore/responsible-ai-pack) pins that repo at `21f6115931f4358ebc7cc87d9ba1f4d87fd015aa`. It recomputes the same three metrics, draws TreeSHAP plots, runs Fairlearn on gender and SeniorCitizen, and fails CI under floors 0.82, 0.63, and 2.60.
 
 Needs operator data before anyone calls this local performance: an operator extract, a refit, and a new pin. The IBM metrics stay IBM metrics.
 
-### Horizon 3 — Self-healing journeys
+### Later - Self-healing journeys
 
 What the demos actually are:
 
 - [omnichannel-care-analytics](https://github.com/ChristopherKiokoStrathmore/omnichannel-care-analytics) computes journey KPIs on a seeded synthetic log (seed 20260929, 4,000 journeys). Charts are Plotly HTML labelled SYNTHETIC. Bitext supplies the intent taxonomy. The full Kaggle Twitter corpus was not downloaded: unauthenticated requests did not return the file, and no Kaggle credentials were used. pm4py is not used. The process view is a DuckDB directly-follows table.
 - [care-automation-roi](https://github.com/ChristopherKiokoStrathmore/care-automation-roi) prices containment from `assumptions.yaml`. Every input is an illustrative placeholder. On those placeholders the base bot scenario shows payback 8.47 months and year-1 ROI 0.4175. There is no Streamlit app. The sensitivity chart is a committed PNG, `reports/charts/roi_sensitivity_tornado.png`, plus an HTML twin.
 
-What is not built: a loop that changes a live route when a digital attempt fails. Horizon 3 is that loop. The four repos do not contain it.
+What is not built: a loop that changes a live route when a digital attempt fails. Later is that loop. The four repos do not contain it.
 
 Needs operator data: replace `config/synthetic.yaml` and `assumptions.yaml` with operator measurements, using the swap steps those READMEs already print. Until then the rates and the payback stay synthetic or illustrative.
 
@@ -73,9 +79,9 @@ Illustrative targets. None of these is a result this portfolio has achieved on o
 | KR2 | Cost and containment inputs are replaced from operator sources, and the placeholder label comes off only after that swap. | The label is still on every input. |
 | KR3 | A failed digital attempt changes the next route in a named pilot path. | No repo implements that change. |
 
-## Value versus effort
+## Backlog and prioritisation
 
-Scores are illustrative planning scores for this artefact, on a 1–5 scale. They are not measured benefit and not hours. The quadrant is a reading aid for the backlog. Overlapping scores are nudged on the chart so the labels fit. The table is the score.
+Scores are illustrative planning scores for this artefact, on a 1-5 scale. They are not measured benefit and not hours. The quadrant is a reading aid for the backlog. Overlapping scores are nudged on the chart so the labels fit. The table is the score.
 
 | Item | Issue | Value | Effort | Quadrant | Status |
 | --- | --- | --- | --- | --- | --- |
@@ -121,7 +127,7 @@ quadrantChart
 
 Epics: [#3](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/3) triage, [#8](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/8) NBA and churn, [#13](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/13) self-healing journeys. The full sheet is [backlog.csv](backlog.csv).
 
-## Sprint plans and pilot charter
+## Pilot plan
 
 Two sprint plans, with user stories and Given / When / Then criteria: [docs/sprint-plans.md](docs/sprint-plans.md).
 
@@ -135,11 +141,13 @@ Epics and stories are GitHub issues in this repository: [#3](https://github.com/
 
 A GitHub Projects board was **not** created. `createProjectV2` for owner ChristopherKiokoStrathmore was denied, and creating labels or milestones returned HTTP 403. Issues [#1](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/1) and [#2](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/2) are permission probes (`probe issue delete me`, `label probe`). The same token cannot edit or close them. They are not backlog items.
 
-There is no board link. Run [scripts/create_board.sh](scripts/create_board.sh) with a user token that has `project` and `repo` scope. The script closes the two probes if it can, creates labels and milestones, applies them from `backlog.csv`, creates the user-level Project, and adds issues #3–#19. Until that script prints a URL, the board does not exist.
+There is no board link. Run [scripts/create_board.sh](scripts/create_board.sh) with a user token that has `project` and `repo` scope. The script closes the two probes if it can, creates labels and milestones, applies them from `backlog.csv`, creates the user-level Project, and adds issues #3-#19. Until that script prints a URL, the board does not exist.
 
-## Retrospective of Projects 1–4
+## Lessons learned
 
-This section is only what `git log` and GitHub Actions showed on 29 September 2026 for the four repos. It does not record stand-ups, planning ceremonies, velocities, story points, teammates, or durations of effort. It does not say who typed the changes. Names below are the git author and committer fields.
+All four projects were built on 29 September 2026 as a self-directed portfolio series. The git history records 26 commits and six CI runs. Five runs passed. One run in care-automation-roi failed on the first attempt because the package was not on the test path; commit [dcc01d2](https://github.com/ChristopherKiokoStrathmore/care-automation-roi/commit/dcc01d2d2b538b075f223e0066d12f5e112a0db5) fixed `pytest.ini` and the next run passed. Lessons: set up the test path before the first push; keep every published number traceable to a committed output file; label synthetic and illustrative figures inline.
+
+The notes below are what `git log` and GitHub Actions showed on 29 September 2026. Names are the git author and committer fields.
 
 All 26 commits, and all six Actions runs, are dated 29 September 2026. The first commit is 11:39:58Z. The last Actions run updated at 13:08:43Z. That is the span of the recorded timestamps, not a measure of hours worked.
 
@@ -198,12 +206,16 @@ No other failure appears in the six runs.
 - The n8n file has not been imported or executed.
 - MULTI-HEAD accuracy on gold labels is not documented in that source repo. The responsible-ai pack does not invent it and does not call the live API to manufacture a number.
 
+## Data and scope
+
+Built on public and synthetic data as an independent portfolio project.
+
 ## Limitations
 
-- Personal portfolio artefact. Not an employer strategy, not a Safaricom plan, and not a production roadmap.
-- Illustrative OKR targets and the 1–5 scores are planning labels in this repo. They are not measurements.
-- The retrospective stops at git history and Actions for the four repos on 29 September 2026. Anything those records do not show is omitted on purpose.
-- Horizon 3's closed loop is not implemented.
-- Projects 1–4 use the IBM US sample, a synthetic journey log, Bitext intent names, a short Twitter preview, and labelled cost assumptions. None of that is operator customer data.
+- This roadmap sequences public demos. It is not a production operating plan.
+- Illustrative OKR targets and the 1-5 scores are planning labels in this repo. They are not measurements.
+- Lessons learned stop at git history and Actions for the four repos on 29 September 2026. Anything those records do not show is omitted on purpose.
+- The closed loop in Later is not implemented.
+- Projects 1-4 use the IBM US sample, a synthetic journey log, Bitext intent names, a short Twitter preview, and labelled cost assumptions. None of that is operator customer data.
 - The Projects board does not exist until `scripts/create_board.sh` is run successfully. Issues #1 and #2 are probes, not scope.
 - This repo does not add a new model, a new dataset, or a new metric.

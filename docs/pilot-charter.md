@@ -1,13 +1,13 @@
 # Pilot / proof-of-concept charter
 
-Template for a personal portfolio pilot. Copy it, fill the blanks, and leave a blank empty when the number is not in one of the public repos. This is not an employer charter and it authorises no production traffic.
+Template for an independent portfolio pilot. Copy it, fill the blanks, and leave a blank empty when the number is not in one of the public repos. Filling it in does not authorise production traffic.
 
 ## Header
 
 | Field | Entry |
 | --- | --- |
 | Pilot name | |
-| Horizon (1 triage, 2 NBA, or 3 journeys) | |
+| Horizon (Now / triage, Next / NBA, or Later / journeys) | |
 | Owner | |
 | Start / decision date | |
 | Starting repo | |
@@ -27,7 +27,7 @@ Quote only a figure that the pinned README or metrics file prints. Write the dat
 | --- | --- | --- |
 | | | No |
 
-Do not paste customer records, credentials, or employer extracts into the portfolio repos.
+Do not paste customer records, credentials, or operator extracts into the portfolio repos.
 
 ## Out of scope
 
@@ -57,7 +57,7 @@ Stop the pilot when a gated metric falls under the floor written for that model,
 
 ## Worked example (not a live pilot)
 
-Horizon 1, starting from [care-automation-roi](https://github.com/ChristopherKiokoStrathmore/care-automation-roi) and [MULTI-HEAD-](https://github.com/ChristopherKiokoStrathmore/MULTI-HEAD-).
+Now (horizon 1), starting from [care-automation-roi](https://github.com/ChristopherKiokoStrathmore/care-automation-roi) and [MULTI-HEAD-](https://github.com/ChristopherKiokoStrathmore/MULTI-HEAD-).
 
 Hypothesis: an `emergency` label can be branched to a senior queue in the committed n8n export, without quoting a measured accuracy.
 
