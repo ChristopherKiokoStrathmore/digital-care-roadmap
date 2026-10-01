@@ -30,6 +30,8 @@ def visible_strings(facts):
     found = [facts.CAVEAT, facts.QUESTION, facts.QUESTION_TAIL, *facts.SERIES]
     found.extend(facts.SHORT.values())
     found.extend(facts.STATUS.values())
+    for value, label in facts.HERO_STATS:
+        found.extend((value, label))
     for horizon in facts.HORIZONS:
         found.append(horizon["title"])
         found.extend(horizon["lines"])

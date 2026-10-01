@@ -59,6 +59,14 @@ STATUS = {
     19: "Declined in the ROI README",
 }
 
+# Large type on the result panel. These are the leading digits of the IBM
+# holdout figures printed in full on the Next lane: ROC-AUC 0.846001 and
+# top-decile lift 2.806733.
+HERO_STATS = (
+    ("0.846", "ROC-AUC"),
+    ("2.8x", "top-decile lift"),
+)
+
 HORIZONS = [
     {
         "key": "NOW",

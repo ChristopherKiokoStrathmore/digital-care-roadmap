@@ -1,21 +1,58 @@
 #!/usr/bin/env python3
 """Draw the story figures in assets/ from backlog.csv and the README.
 
-Needs Pillow and CairoSVG, plus Fraunces and Inter Tight (downloaded on first run).
-Does not invent metrics. story_facts.py is the only source of labels and numbers.
+CairoSVG draws text with Cairo's select_font_face, which asks fontconfig for
+the family name and ignores @font-face. This script installs Fraunces Black
+and Inter Tight into ~/.fonts and refreshes the font cache before rasterizing.
+
+Needs Pillow, CairoSVG, fontTools, and fc-cache. story_facts.py is the only
+source of labels and numbers.
 """
 
+import shutil
+import subprocess
 import urllib.request
 from pathlib import Path
 
 import cairosvg
+from fontTools.ttLib import TTFont
 from PIL import Image, ImageFont
 
 import story_facts as facts
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets"
-FONT_DIR = Path("/tmp/fonts")
+FONT_SRC = Path("/tmp/digital-care-fontsrc")
+FONT_DIR = Path.home() / ".fonts" / "digital-care"
+
+# Logical face -> (installed filename, svg family, svg weight, source url).
+# Weight 400 stays regular in Cairo. Weight 700 selects the bold face.
+FONTS = {
+    "Fraunces": (
+        "Fraunces-Black.ttf",
+        "Fraunces",
+        "700",
+        "https://cdn.jsdelivr.net/fontsource/fonts/fraunces@5.2.5/latin-900-normal.ttf",
+    ),
+    "Inter": (
+        "InterTight-Regular.ttf",
+        "Inter Tight",
+        "400",
+        "https://cdn.jsdelivr.net/fontsource/fonts/inter-tight@5.2.5/latin-400-normal.ttf",
+    ),
+    "InterSemi": (
+        "InterTight-SemiBold.ttf",
+        "Inter Tight SemiBold",
+        "400",
+        "https://cdn.jsdelivr.net/fontsource/fonts/inter-tight@5.2.5/latin-600-normal.ttf",
+    ),
+    "InterBold": (
+        "InterTight-Bold.ttf",
+        "Inter Tight",
+        "700",
+        "https://cdn.jsdelivr.net/fontsource/fonts/inter-tight@5.2.5/latin-700-normal.ttf",
+    ),
+}
 
 DEEP = "#0B3D2E"
 DEEP_MID = "#1B6B4A"
@@ -29,25 +66,6 @@ LINE = "#E4D9C6"
 SOFT = "#E7F2EC"
 SOFT_GOLD = "#F8F1DE"
 PALE = "#F3EFE6"
-
-FONTS = {
-    "Fraunces": (
-        "fraunces-700.ttf",
-        "https://cdn.jsdelivr.net/fontsource/fonts/fraunces@5.2.5/latin-700-normal.ttf",
-    ),
-    "Inter": (
-        "intertight-500.ttf",
-        "https://cdn.jsdelivr.net/fontsource/fonts/inter-tight@5.2.5/latin-500-normal.ttf",
-    ),
-    "InterSemi": (
-        "intertight-600.ttf",
-        "https://cdn.jsdelivr.net/fontsource/fonts/inter-tight@5.2.5/latin-600-normal.ttf",
-    ),
-    "InterBold": (
-        "intertight-700.ttf",
-        "https://cdn.jsdelivr.net/fontsource/fonts/inter-tight@5.2.5/latin-700-normal.ttf",
-    ),
-}
 
 HORIZON_COLOR = {"NOW": DEEP, "NEXT": DEEP_MID, "LATER": GOLD}
 QUADRANT_FILL = {
@@ -67,14 +85,54 @@ DOT = {"do-first": DEEP, "major-bet": GOLD, "reconsider": "#8C4E3B"}
 _FACES = {}
 
 
+def rewrite_fraunces(source, dest):
+    """Publish Fraunces Black as family Fraunces, style Bold, so Cairo's bold lookup hits it."""
+    font = TTFont(source)
+    name = font["name"]
+    platforms = {(rec.platformID, rec.platEncID, rec.langID) for rec in name.names}
+    labels = {
+        1: "Fraunces",
+        2: "Bold",
+        4: "Fraunces Bold",
+        6: "Fraunces-Bold",
+        16: "Fraunces",
+        17: "Bold",
+    }
+    for platform, encoding, language in platforms:
+        for name_id, value in labels.items():
+            name.setName(value, name_id, platform, encoding, language)
+    os2 = font["OS/2"]
+    os2.usWeightClass = 900
+    os2.fsSelection = (os2.fsSelection | 0x20) & ~0x40
+    font["head"].macStyle |= 0x01
+    font.save(dest)
+
+
 def ensure_fonts():
+    FONT_SRC.mkdir(parents=True, exist_ok=True)
     FONT_DIR.mkdir(parents=True, exist_ok=True)
     paths = {}
-    for family, (filename, url) in FONTS.items():
-        path = FONT_DIR / filename
-        if not path.exists() or path.stat().st_size < 1000:
-            urllib.request.urlretrieve(url, path)
-        paths[family] = path
+    for key, (filename, _family, _weight, url) in FONTS.items():
+        source = FONT_SRC / filename
+        if not source.exists() or source.stat().st_size < 1000:
+            urllib.request.urlretrieve(url, source)
+        dest = FONT_DIR / filename
+        if key == "Fraunces":
+            rewrite_fraunces(source, dest)
+        elif not dest.exists() or dest.stat().st_size < 1000:
+            shutil.copy(source, dest)
+        paths[key] = dest
+    subprocess.run(["fc-cache", "-f", str(FONT_DIR)], check=True)
+    expected = {
+        "Fraunces:weight=bold": paths["Fraunces"],
+        "Inter Tight": paths["Inter"],
+        "Inter Tight:weight=bold": paths["InterBold"],
+        "Inter Tight SemiBold": paths["InterSemi"],
+    }
+    for query, path in expected.items():
+        got = subprocess.check_output(["fc-match", "-f", "%{file}", query], text=True).strip()
+        if Path(got).resolve() != path.resolve():
+            raise SystemExit(f"fontconfig matched {got} for {query}, expected {path}")
     return paths
 
 
@@ -154,16 +212,22 @@ class Svg:
         pts = " ".join(f"{x},{y}" for x, y in points)
         self.add(f'<polygon points="{pts}" fill="{fill}"/>')
 
+    def _font_attrs(self, family):
+        _filename, css_family, weight, _url = FONTS[family]
+        return css_family, weight
+
     def text(self, x, y, value, family, size, fill, anchor="start"):
         check_prose(value)
+        css_family, weight = self._font_attrs(family)
         self.add(
-            f'<text x="{x}" y="{y}" font-family="{family}" font-size="{size}" fill="{fill}" text-anchor="{anchor}">{esc(value)}</text>'
+            f'<text x="{x}" y="{y}" font-family="{css_family}" font-weight="{weight}" font-size="{size}" fill="{fill}" text-anchor="{anchor}">{esc(value)}</text>'
         )
 
     def center(self, x, y, value, family, size, fill):
         check_prose(value)
+        css_family, weight = self._font_attrs(family)
         self.add(
-            f'<text x="{x}" y="{y}" font-family="{family}" font-size="{size}" fill="{fill}" text-anchor="middle" dominant-baseline="central">{esc(value)}</text>'
+            f'<text x="{x}" y="{y}" font-family="{css_family}" font-weight="{weight}" font-size="{size}" fill="{fill}" text-anchor="middle" dominant-baseline="central">{esc(value)}</text>'
         )
 
     def block(self, x, y, lines, family, size, fill, lh, anchor="start"):
@@ -195,15 +259,10 @@ class Svg:
         self.rect(0, self.h - 8, self.w, 8, GOLD)
 
     def render(self):
-        faces = "\n".join(
-            f"@font-face {{ font-family: '{family}'; src: url('file://{path}'); }}"
-            for family, path in self.paths.items()
-        )
         body = "\n".join(self.parts)
         return (
             f'<?xml version="1.0" encoding="UTF-8"?>'
             f'<svg xmlns="http://www.w3.org/2000/svg" width="{self.w}" height="{self.h}" viewBox="0 0 {self.w} {self.h}">'
-            f"<style>{faces}</style>"
             f'<rect width="{self.w}" height="{self.h}" fill="{CREAM}"/>'
             f"{body}</svg>"
         )
@@ -289,11 +348,16 @@ def hero(paths):
 
     # Result
     x = cards[2]
-    svg.text(x + 28, 108, "RESULT", "InterBold", 13, GOLD)
-    svg.text(x + 28, 152, "Now, Next, Later", "Fraunces", 32, DEEP)
+    svg.text(x + 28, 100, "RESULT", "InterBold", 13, GOLD)
+    svg.text(x + 28, 136, "Now, Next, Later", "Fraunces", 28, DEEP)
+    for index, (value, label) in enumerate(facts.HERO_STATS):
+        sx = x + 28 + index * 214
+        svg.text(sx, 186, value, "Fraunces", 40, DEEP)
+        svg.text(sx, 208, label, "InterSemi", 13, MUTED)
+    svg.text(x + 28, 228, "IBM holdout", "Inter", 12, MUTED)
     lanes = facts.HORIZONS
-    lane_y = 186
-    lane_h = 156
+    lane_y = 248
+    lane_h = 142
     for index, horizon in enumerate(lanes):
         y = lane_y + index * (lane_h + 18)
         color = HORIZON_COLOR[horizon["key"]]
@@ -406,7 +470,7 @@ def quadrant(paths):
 
     svg.center((inner_x + xp(5)) / 2, plot_y + plot_h - 16, "Effort", "InterSemi", 14, INK)
     svg.add(
-        f'<text x="{plot_x + 22}" y="{(inner_y + yp(1)) / 2}" font-family="InterSemi" font-size="14" fill="{INK}" text-anchor="middle" transform="rotate(-90 {plot_x + 22} {(inner_y + yp(1)) / 2})">Value</text>'
+        f'<text x="{plot_x + 22}" y="{(inner_y + yp(1)) / 2}" font-family="Inter Tight SemiBold" font-weight="400" font-size="14" fill="{INK}" text-anchor="middle" transform="rotate(-90 {plot_x + 22} {(inner_y + yp(1)) / 2})">Value</text>'
     )
 
     groups = {}
