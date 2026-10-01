@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
 # Create a user-level GitHub Project (v2) and attach the backlog issues.
 #
-# The token that opened issues #3-#19 could not create a Project for
-# ChristopherKiokoStrathmore (createProjectV2: permission denied), and it
-# could not create labels or milestones (HTTP 403). It also could not edit
-# or close issues #1 and #2, which are permission probes and not backlog items.
-#
-# Run this once, as a user who is allowed to own the Project:
+# Requires gh logged in with a token that has project and repo scope:
 #   gh auth refresh -s project,repo
 #   ./scripts/create_board.sh
 #
-# There is no board until this script succeeds. Do not invent a board URL.
+# Closes issues #1 and #2 (they are not backlog items), creates labels and
+# milestones, applies them from backlog.csv, creates or reuses the user-level
+# Project, and adds issues #3-#19. On success the script prints the board URL.
 
 set -euo pipefail
 
@@ -24,7 +21,7 @@ if ! gh auth status >/dev/null 2>&1; then
   exit 1
 fi
 
-# Best-effort. The setup token could not close these. A user token can.
+# Issues #1 and #2 are outside the backlog. Closing them is best-effort.
 gh issue close 1 --repo "$REPO" --reason "not planned" \
   --comment "Permission probe, not a backlog item. The backlog starts at #3." || true
 gh issue close 2 --repo "$REPO" --reason "not planned" \
