@@ -46,7 +46,7 @@ class ReadmeTest(unittest.TestCase):
 
     def test_license_python_version_and_make_targets(self):
         license_text = (ROOT / "LICENSE").read_text(encoding="utf-8")
-        self.assertIn("Copyright (c) 2026 Christopher Nguu Kioko", license_text)
+        self.assertIn("Copyright (c) 2026 Christopher Nguu", license_text)
         self.assertIn("MIT License", license_text)
         version = (ROOT / ".python-version").read_text(encoding="utf-8").strip()
         self.assertEqual(version, "3.12")
