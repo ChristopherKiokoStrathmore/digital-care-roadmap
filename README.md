@@ -1,5 +1,7 @@
 # Digital care roadmap
 
+![Four unordered care demos, the score-and-sequence method, and the Now / Next / Later result](assets/hero.png)
+
 [![CI](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/actions/workflows/ci.yml/badge.svg)](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/actions/workflows/ci.yml)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/release/python-3120/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -78,6 +80,10 @@ Needs operator data: replace `config/synthetic.yaml` and `assumptions.yaml` with
 
 Illustrative targets. None of these is a result this portfolio has achieved on operator data.
 
+![Three OKRs: illustrative target beside what the demos already show](assets/okrs.png)
+
+*The gold note is the illustrative target. The green note is what the public demos already show.*
+
 **Objective 1. A routing note a reviewer can defend without a fake accuracy number.**
 
 | Key result | Illustrative target | What the demos already show |
@@ -148,6 +154,10 @@ quadrantChart
     Streamlit: [0.56, 0.28]
 ```
 
+![14 stories plotted on the value and effort scores in backlog.csv](assets/backlog-quadrant.png)
+
+*Position is the value and effort in the table above. Colour is the quadrant column. Stories that share a score share one dot.*
+
 Epics: [#3](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/3) triage, [#8](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/8) NBA and churn, [#13](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/13) self-healing journeys. The full sheet is [backlog.csv](backlog.csv).
 
 ## Pilot plan
@@ -155,6 +165,10 @@ Epics: [#3](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/i
 Two sprint plans, with user stories and Given / When / Then criteria: [docs/sprint-plans.md](docs/sprint-plans.md).
 
 Sprint 1 is the triage contract ([#4](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/4), [#5](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/5), [#6](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/6)). Sprint 2 is the NBA demo behind the published gates ([#9](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/9), [#10](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/10), [#11](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/issues/11)). These sprints were not run.
+
+![Sprint 1 triage stories and Sprint 2 NBA stories](assets/sprints.png)
+
+*Sprint 1 and Sprint 2 as written in the sprint plan. These sprints were not run.*
 
 Pilot / PoC charter template: [docs/pilot-charter.md](docs/pilot-charter.md).
 
