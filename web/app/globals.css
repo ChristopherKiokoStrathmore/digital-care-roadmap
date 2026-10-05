@@ -309,7 +309,7 @@ a:hover {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.85rem;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .lane,
@@ -557,7 +557,7 @@ a:hover {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(16rem, 0.7fr);
   gap: 0.85rem;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .plot-card,
@@ -738,6 +738,7 @@ tr.is-selected {
 
 .okr-card {
   padding: 1rem 1rem 0.4rem;
+  overflow-x: auto;
 }
 
 .objective-no {
@@ -760,6 +761,10 @@ tr.is-selected {
   font-weight: 700;
 }
 
+.table-wrap table {
+  min-width: 48rem;
+}
+
 .caption {
   caption-side: bottom;
   text-align: left;
@@ -774,7 +779,7 @@ tr.is-selected {
 }
 
 .footer-inner {
-  align-items: start;
+  align-items: flex-start;
   flex-wrap: wrap;
 }
 
@@ -793,6 +798,47 @@ tr.is-selected {
 
 .text-link {
   font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .okr-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .okr-table,
+  .okr-table tbody,
+  .okr-table tr,
+  .okr-table th,
+  .okr-table td {
+    display: block;
+    width: auto;
+  }
+
+  .okr-table tr {
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .okr-table th,
+  .okr-table td {
+    border: 0;
+    padding: 0.45rem 0.2rem 0;
+  }
+
+  .okr-table th::before,
+  .okr-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.15rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
 }
 
 @media (max-width: 900px) {

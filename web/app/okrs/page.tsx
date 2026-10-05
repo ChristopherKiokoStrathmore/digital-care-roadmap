@@ -40,9 +40,11 @@ export default function OkrsPage() {
               <tbody>
                 {objective.krs.map((kr) => (
                   <tr key={kr.id}>
-                    <th scope="row">{kr.id}</th>
-                    <td>{kr.target}</td>
-                    <td>{kr.shown}</td>
+                    <th scope="row" data-label="Key result">
+                      {kr.id}
+                    </th>
+                    <td data-label="Illustrative target">{kr.target}</td>
+                    <td data-label="What the demos already show">{kr.shown}</td>
                   </tr>
                 ))}
               </tbody>
