@@ -1,57 +1,44 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Suspense } from "react";
 
-import { CAVEAT, OKRS } from "@/lib/content";
+import { OkrsExplorer } from "@/components/OkrsExplorer";
+import { OkrTables } from "@/components/OkrTables";
+import { CAVEAT } from "@/lib/content";
+import { loadBacklog } from "@/lib/backlog";
 
 export const metadata: Metadata = {
   title: "Illustrative OKRs",
   description:
-    "Illustrative OKR targets for the digital care roadmap. None of these is a result achieved on operator data.",
+    "Click an illustrative OKR, compare the target with what the public demos already show, and open the linked backlog row.",
 };
 
 export default function OkrsPage() {
+  const items = loadBacklog();
+
   return (
     <main id="content" className="wrap page">
       <header className="page-head">
         <p className="kicker">Illustrative</p>
         <h1>OKRs</h1>
         <p className="lede">
-          Illustrative targets. None of these is a result this portfolio has achieved on
-          operator data.
+          Pick an objective, then a key result. The target stays a planning label. The
+          second pane is what the public demos already show.
         </p>
         <p className="caveat">{CAVEAT}</p>
+        <p>
+          <Link className="text-link" href="/article#okrs">
+            Read the OKRs in the write-up
+          </Link>
+        </p>
       </header>
-      <div className="okr-list">
-        {OKRS.map((objective) => (
-          <article key={objective.n} className="okr-card">
-            <p className="objective-no">Objective {objective.n}</p>
-            <h2>{objective.title}</h2>
-            <table className="okr-table">
-              <caption className="caption">
-                The illustrative target is the planning label. The second column is what
-                the public demos already show.
-              </caption>
-              <thead>
-                <tr>
-                  <th scope="col">Key result</th>
-                  <th scope="col">Illustrative target</th>
-                  <th scope="col">What the demos already show</th>
-                </tr>
-              </thead>
-              <tbody>
-                {objective.krs.map((kr) => (
-                  <tr key={kr.id}>
-                    <th scope="row" data-label="Key result">
-                      {kr.id}
-                    </th>
-                    <td data-label="Illustrative target">{kr.target}</td>
-                    <td data-label="What the demos already show">{kr.shown}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </article>
-        ))}
-      </div>
+      <Suspense fallback={<p className="note">Loading the OKR view.</p>}>
+        <OkrsExplorer items={items} />
+      </Suspense>
+      <details className="fold">
+        <summary>Show the full illustrative table</summary>
+        <OkrTables />
+      </details>
     </main>
   );
 }

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Suspense } from "react";
 
 import { BacklogExplorer } from "@/components/BacklogExplorer";
 import { SCORE_NOTE } from "@/lib/content";
@@ -21,12 +23,19 @@ export default function BacklogPage() {
         <h1>Backlog</h1>
         <p className="lede">
           {items.length} rows from the sheet ({stories} stories and{" "}
-          {items.length - stories} epics) across {countHorizons(items)} horizons.{" "}
-          {SCORE_NOTE}
+          {items.length - stories} epics) across {countHorizons(items)} horizons. Filter
+          the plot and the table, then open a row on the board. {SCORE_NOTE}
+        </p>
+        <p>
+          <Link className="text-link" href="/article#backlog-sheet">
+            Read the backlog in the write-up
+          </Link>
         </p>
       </header>
       <div className="section-gap">
-        <BacklogExplorer items={items} />
+        <Suspense fallback={<p className="note">Loading the backlog.</p>}>
+          <BacklogExplorer items={items} />
+        </Suspense>
       </div>
     </main>
   );
