@@ -17,6 +17,12 @@ A Now / Next / Later product roadmap that sequences the four earlier projects, w
 - [omnichannel-care-analytics](https://github.com/ChristopherKiokoStrathmore/omnichannel-care-analytics)
 - [care-automation-roi](https://github.com/ChristopherKiokoStrathmore/care-automation-roi)
 
+## Live demo
+
+Interactive Now / Next / Later board, value-versus-effort backlog, and illustrative OKRs. The app is [`web/`](web/) (Next.js, App Router). On Vercel, set the project Root Directory to `web`.
+
+Deployment URL: _placeholder until the first Vercel deploy._
+
 ## Run
 
 Requires Python 3.12.
