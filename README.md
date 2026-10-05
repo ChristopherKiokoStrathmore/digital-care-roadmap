@@ -1,5 +1,7 @@
 # Digital care roadmap
 
+Live deployment: [https://digital-care-roadmap.vercel.app](https://digital-care-roadmap.vercel.app)
+
 ![Four unordered care demos, the score-and-sequence method, and the Now / Next / Later result](assets/hero.png)
 
 [![CI](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/actions/workflows/ci.yml/badge.svg)](https://github.com/ChristopherKiokoStrathmore/digital-care-roadmap/actions/workflows/ci.yml)
@@ -21,7 +23,7 @@ A Now / Next / Later product roadmap that sequences the four earlier projects, w
 
 Interactive Now / Next / Later board, value-versus-effort backlog, and illustrative OKRs. The app is [`web/`](web/) (Next.js, App Router). On Vercel, set the project Root Directory to `web`.
 
-Deployment URL: _placeholder until the first Vercel deploy._
+Deployment URL: [https://digital-care-roadmap.vercel.app](https://digital-care-roadmap.vercel.app)
 
 ## Run
 
