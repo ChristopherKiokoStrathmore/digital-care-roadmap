@@ -49,6 +49,13 @@ class BacklogTest(unittest.TestCase):
             self.assertIn(row["needs_operator_data"], {"yes", "no"})
             self.assertIn(row["type"], {"epic", "story"})
 
+    def test_web_copy_matches_the_sheet(self):
+        web = ROOT / "web" / "backlog.csv"
+        self.assertEqual(
+            web.read_text(encoding="utf-8"),
+            CSV_PATH.read_text(encoding="utf-8"),
+        )
+
     def test_sprint_rows_point_at_sprint_milestones(self):
         for row in self.rows:
             if row["sprint"] == "1":

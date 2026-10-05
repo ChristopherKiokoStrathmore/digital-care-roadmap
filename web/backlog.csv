@@ -1,0 +1,18 @@
+id,issue_number,type,title,horizon,sprint,value,effort,quadrant,status,repos,needs_operator_data,labels,milestone
+E1,3,epic,Epic: Triage and routing,1,,5,3,major-bet,demo-partial,MULTI-HEAD-;responsible-ai-pack;care-automation-roi,yes,epic;horizon-1,
+S1,4,story,State the triage quality gap before a route uses the label,1,1,5,1,do-first,demo-exists,responsible-ai-pack,no,story;horizon-1;demo-exists,Sprint 1
+S2,5,story,Keep issue scores below 0.6 on the review path,1,1,4,1,do-first,demo-exists,MULTI-HEAD-,no,story;horizon-1;demo-exists,Sprint 1
+S3,6,story,Branch an emergency label in the n8n export,1,1,4,2,do-first,export-not-run,care-automation-roi,yes,story;horizon-1;demo-exists;needs-operator-data,Sprint 1
+S4,7,story,Measure triage precision and recall before quoting them,1,,5,5,major-bet,not-started,care-automation-roi;MULTI-HEAD-,yes,story;horizon-1;needs-operator-data,Later
+E2,8,epic,"Epic: NBA, churn, and governance",2,,5,3,major-bet,demo-exists,telco-churn-nba-engine;responsible-ai-pack,yes,epic;horizon-2,
+S5,9,story,Serve one-customer next-best action from POST /score,2,2,5,2,do-first,demo-exists,telco-churn-nba-engine,no,story;horizon-2;demo-exists,Sprint 2
+S6,10,story,"Gate held-out ROC-AUC, PR-AUC, and top-decile lift",2,2,5,2,do-first,demo-exists,responsible-ai-pack,no,story;horizon-2;demo-exists,Sprint 2
+S7,11,story,Publish the gender and SeniorCitizen check with the score,2,2,4,2,do-first,demo-exists,responsible-ai-pack,no,story;horizon-2;demo-exists,Sprint 2
+S8,12,story,Refit the scoring pipeline on an operator extract,2,,5,5,major-bet,not-started,telco-churn-nba-engine;responsible-ai-pack,yes,story;horizon-2;needs-operator-data,Later
+E3,13,epic,Epic: Self-healing journeys,3,,4,5,major-bet,not-built,omnichannel-care-analytics;care-automation-roi,yes,epic;horizon-3,
+S9,14,story,Keep journey KPIs on a labelled synthetic log,3,,3,2,do-first,demo-exists,omnichannel-care-analytics,no,story;horizon-3;demo-exists,Later
+S10,15,story,Keep cost and ROI on labelled assumptions,3,,3,2,do-first,demo-exists,care-automation-roi,no,story;horizon-3;demo-exists,Later
+S11,16,story,Replace synthetic clocks and cost assumptions with operator measurements,3,,5,5,major-bet,not-started,omnichannel-care-analytics;care-automation-roi,yes,story;horizon-3;needs-operator-data,Later
+S12,17,story,Change the next route when a digital attempt fails,3,,4,5,major-bet,not-started,,yes,story;horizon-3;needs-operator-data,Later
+S13,18,story,Leave pm4py off the journey repo,3,,1,3,reconsider,declined,omnichannel-care-analytics,no,story;horizon-3;declined,Later
+S14,19,story,Leave Streamlit off the ROI repo,,,2,3,reconsider,declined,care-automation-roi,no,story;declined,Later

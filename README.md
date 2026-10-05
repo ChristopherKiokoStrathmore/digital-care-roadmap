@@ -10,6 +10,16 @@ Which care-analytics capability should a telco build first, and how would you kn
 
 A Now / Next / Later product roadmap that sequences the four earlier projects, with OKRs as goals and a value-versus-effort backlog of 17 issues (#3 to #19), two sprint plans and a pilot charter. Part of an independent portfolio series on telecom customer analytics, built alongside my MSc in Data Science. It builds on the CRISP-DM projects in the series.
 
+## Live demo
+
+Placeholder. The interactive Now / Next / Later board, the value-versus-effort backlog, and the illustrative OKRs are the Next.js app in [`web/`](web/). Deploy that directory on Vercel with the project root directory set to `web`. Replace this sentence with the production URL after the first deploy.
+
+```bash
+cd web
+npm ci
+npm run build
+```
+
 ## Projects in this series
 
 - [telco-churn-nba-engine](https://github.com/ChristopherKiokoStrathmore/telco-churn-nba-engine)
