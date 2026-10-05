@@ -1,5 +1,16 @@
 import type { HorizonId, Quadrant } from "./types";
 
+export const ITEM_STATUSES = [
+  "demo-exists",
+  "demo-partial",
+  "export-not-run",
+  "not-started",
+  "not-built",
+  "declined",
+] as const;
+
+export type ItemStatus = (typeof ITEM_STATUSES)[number];
+
 const STATUS_LABEL: Record<string, string> = {
   "demo-exists": "Demo exists",
   "demo-partial": "Demo partial",

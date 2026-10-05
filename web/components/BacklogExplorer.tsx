@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import { FilterBar } from "@/components/FilterBar";
+import { useDemoFilters, useIssueSelection } from "@/components/useDemoQuery";
 import { DOCS, issueUrl } from "@/lib/content";
-import { INITIAL_FILTERS, filterItems } from "@/lib/filter";
+import { filterItems } from "@/lib/filter";
 import {
   horizonKicker,
   quadrantLabel,
@@ -34,9 +36,13 @@ const PLOT = {
 };
 
 export function BacklogExplorer({ items }: { items: BacklogItem[] }) {
-  const [filters, setFilters] = useState(INITIAL_FILTERS);
+  const [filters, setFilters] = useDemoFilters();
+  const { selected, selectIssue } = useIssueSelection(items);
   const [sort, setSort] = useState<SortState>({ key: "issue", direction: "asc" });
-  const [focus, setFocus] = useState<Focus | null>(null);
+  const [clusterOnly, setClusterOnly] = useState<Focus | null>(null);
+  const focus: Focus | null = selected
+    ? { value: selected.value, effort: selected.effort, issue: selected.issueNumber }
+    : clusterOnly;
 
   const shown = useMemo(() => filterItems(items, filters), [items, filters]);
   const clusters = useMemo(() => clusterItems(shown), [shown]);
@@ -49,11 +55,14 @@ export function BacklogExplorer({ items }: { items: BacklogItem[] }) {
         null;
 
   function selectCluster(cluster: Cluster) {
-    setFocus((current) =>
-      current && current.value === cluster.value && current.effort === cluster.effort && current.issue === null
-        ? null
-        : { value: cluster.value, effort: cluster.effort, issue: null },
-    );
+    const same =
+      clusterOnly !== null &&
+      selected === null &&
+      clusterOnly.value === cluster.value &&
+      clusterOnly.effort === cluster.effort &&
+      clusterOnly.issue === null;
+    selectIssue(null);
+    setClusterOnly(same ? null : { value: cluster.value, effort: cluster.effort, issue: null });
   }
 
   function moveFocus(key: string) {
@@ -61,12 +70,16 @@ export function BacklogExplorer({ items }: { items: BacklogItem[] }) {
     const ordered = [...clusters].sort((a, b) => a.effort - b.effort || b.value - a.value);
     if (!focus) {
       const first = ordered[0];
-      if (first) setFocus({ value: first.value, effort: first.effort, issue: null });
+      if (first) {
+        selectIssue(null);
+        setClusterOnly({ value: first.value, effort: first.effort, issue: null });
+      }
       return;
     }
     const next = nearest(clusters, focus, key);
     if (!next) return;
-    setFocus({ value: next.value, effort: next.effort, issue: null });
+    selectIssue(null);
+    setClusterOnly({ value: next.value, effort: next.effort, issue: null });
     document.getElementById(`score-${next.value}-${next.effort}`)?.focus();
   }
 
@@ -76,7 +89,7 @@ export function BacklogExplorer({ items }: { items: BacklogItem[] }) {
         value={filters}
         onChange={(next) => {
           setFilters(next);
-          setFocus(null);
+          setClusterOnly(null);
         }}
         shown={shown.length}
         total={items.length}
@@ -90,18 +103,30 @@ export function BacklogExplorer({ items }: { items: BacklogItem[] }) {
             onKey={moveFocus}
           />
           <ul className="legend">
-            <li>
-              <span className="swatch" data-quadrant="do-first" aria-hidden="true" />
-              Do first
-            </li>
-            <li>
-              <span className="swatch" data-quadrant="major-bet" aria-hidden="true" />
-              Major bet
-            </li>
-            <li>
-              <span className="swatch" data-quadrant="reconsider" aria-hidden="true" />
-              Reconsider
-            </li>
+            {(
+              [
+                ["do-first", "Do first"],
+                ["major-bet", "Major bet"],
+                ["reconsider", "Reconsider"],
+              ] as const
+            ).map(([id, label]) => (
+              <li key={id}>
+                <button
+                  type="button"
+                  className="legend-button"
+                  aria-pressed={filters.quadrant === id}
+                  onClick={() =>
+                    setFilters({
+                      ...filters,
+                      quadrant: filters.quadrant === id ? "all" : id,
+                    })
+                  }
+                >
+                  <span className="swatch" data-quadrant={id} aria-hidden="true" />
+                  {label}
+                </button>
+              </li>
+            ))}
           </ul>
           <p className="note">
             Each dot sits on the integer value and effort from{" "}
@@ -114,7 +139,14 @@ export function BacklogExplorer({ items }: { items: BacklogItem[] }) {
           <div className="panel-head">
             <h2>{focusedCluster ? "At this score" : "Score"}</h2>
             {focus ? (
-              <button type="button" className="chip" onClick={() => setFocus(null)}>
+              <button
+                type="button"
+                className="chip"
+                onClick={() => {
+                  selectIssue(null);
+                  setClusterOnly(null);
+                }}
+              >
                 Clear
               </button>
             ) : null}
@@ -136,13 +168,10 @@ export function BacklogExplorer({ items }: { items: BacklogItem[] }) {
                     <button
                       type="button"
                       className={focus?.issue === item.issueNumber ? "is-current" : undefined}
-                      onClick={() =>
-                        setFocus({
-                          value: item.value,
-                          effort: item.effort,
-                          issue: item.issueNumber,
-                        })
-                      }
+                      onClick={() => {
+                        setClusterOnly(null);
+                        selectIssue(item);
+                      }}
                     >
                       <strong>
                         #{item.issueNumber} {shortLabel(item.issueNumber, item.title)}
@@ -152,7 +181,19 @@ export function BacklogExplorer({ items }: { items: BacklogItem[] }) {
                   </li>
                 ))}
               </ul>
+              {focus?.issue ? (
+                <p>
+                  <Link className="text-link" href={`/?issue=${focus.issue}`}>
+                    Open #{focus.issue} on the board
+                  </Link>
+                </p>
+              ) : null}
             </>
+          ) : selected ? (
+            <p className="note">
+              #{selected.issueNumber} is hidden by the current filters.{" "}
+              <Link href={`/?issue=${selected.issueNumber}`}>Open it on the board</Link>.
+            </p>
           ) : (
             <p className="note">
               Select a dot. Arrow keys move across occupied scores. The number inside a
@@ -192,13 +233,10 @@ export function BacklogExplorer({ items }: { items: BacklogItem[] }) {
                     <button
                       type="button"
                       className="row-button"
-                      onClick={() =>
-                        setFocus({
-                          value: item.value,
-                          effort: item.effort,
-                          issue: item.issueNumber,
-                        })
-                      }
+                      onClick={() => {
+                        setClusterOnly(null);
+                        selectIssue(item);
+                      }}
                     >
                       {item.title}
                     </button>

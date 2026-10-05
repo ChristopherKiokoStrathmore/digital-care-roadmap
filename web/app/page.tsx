@@ -1,5 +1,8 @@
+import { Suspense } from "react";
+import Link from "next/link";
+
 import { RoadmapBoard } from "@/components/RoadmapBoard";
-import { CAVEAT, MULTI_HEAD, SERIES } from "@/lib/content";
+import { CAVEAT } from "@/lib/content";
 import { countHorizons, loadBacklog } from "@/lib/backlog";
 
 export default function HomePage() {
@@ -9,13 +12,17 @@ export default function HomePage() {
 
   return (
     <main id="content" className="wrap page">
-      <header className="hero">
-        <p className="eyebrow">Telecom care analytics · portfolio roadmap</p>
-        <h1>Which care-analytics capability should a telco build first?</h1>
+      <header className="demo-intro">
+        <p className="eyebrow">Telecom care analytics · interactive roadmap</p>
+        <div className="demo-intro-top">
+          <h1>Which care-analytics capability should a telco build first?</h1>
+          <Link className="text-link article-jump" href="/article">
+            Read the write-up
+          </Link>
+        </div>
         <p className="lede">
-          And how would you know it worked? The four public demos, sequenced as Now,
-          Next, and Later, with illustrative OKRs and a backlog of {epics} epics and{" "}
-          {stories} stories.
+          Open a horizon, select a backlog card, and follow it into the illustrative OKRs.
+          The sheet has {epics} epics and {stories} stories.
         </p>
         <dl className="stats">
           <div>
@@ -32,24 +39,10 @@ export default function HomePage() {
           </div>
         </dl>
         <p className="caveat">{CAVEAT}</p>
-        <ul className="series">
-          {SERIES.map((repo) => (
-            <li key={repo.href}>
-              <a href={repo.href}>
-                {repo.name}
-                <span>{repo.role}</span>
-              </a>
-            </li>
-          ))}
-          <li>
-            <a href={MULTI_HEAD.href}>
-              {MULTI_HEAD.name}
-              <span>{MULTI_HEAD.role}</span>
-            </a>
-          </li>
-        </ul>
       </header>
-      <RoadmapBoard items={items} />
+      <Suspense fallback={<p className="note">Loading the board.</p>}>
+        <RoadmapBoard items={items} />
+      </Suspense>
     </main>
   );
 }

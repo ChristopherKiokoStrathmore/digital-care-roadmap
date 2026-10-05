@@ -19,9 +19,11 @@ A Now / Next / Later product roadmap that sequences the four earlier projects, w
 
 ## Live demo
 
-Interactive Now / Next / Later board, value-versus-effort backlog, and illustrative OKRs. The app is [`web/`](web/) (Next.js, App Router). On Vercel, set the project Root Directory to `web`.
+Interactive Now / Next / Later board, illustrative OKRs, and a filterable value-versus-effort backlog. The Article page on the site carries this write-up.
 
-Deployment URL: _placeholder until the first Vercel deploy._
+[Open the live demo](https://digital-care-roadmap.vercel.app)
+
+The app is [`web/`](web/) (Next.js, App Router). On Vercel, set the project Root Directory to `web`.
 
 ## Run
 

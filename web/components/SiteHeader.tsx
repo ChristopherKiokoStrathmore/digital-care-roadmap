@@ -7,8 +7,9 @@ import { REPO_URL } from "@/lib/content";
 
 const LINKS = [
   { href: "/", label: "Roadmap" },
-  { href: "/backlog", label: "Backlog" },
   { href: "/okrs", label: "OKRs" },
+  { href: "/backlog", label: "Backlog" },
+  { href: "/article", label: "Article" },
 ];
 
 export function SiteHeader() {
